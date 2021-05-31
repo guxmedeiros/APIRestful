@@ -4,48 +4,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.serratec.backend.crud.entity.TodoEntity;
+import org.serratec.backend.crud.exception.TodoNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TodoService {
+	
 	List<TodoEntity> lista = new ArrayList<TodoEntity>();
 	
 	public List<TodoEntity> getAll() {
 		return lista;
 	}
 	
-	public TodoEntity getId(Integer id) {
+	public TodoEntity getId(Integer id) throws TodoNotFoundException {
 		for (TodoEntity element : lista) {
 			if(element.getId() == id) {
 				return element;
 			}
 		}
-		System.out.println("ID nao encontrado");
-		return null;
+		throw new TodoNotFoundException("Não foi possivel encontrar esse id: " + id);
 	}
 	
-	public void create(TodoEntity todo) {
+	public TodoEntity create(TodoEntity todo) {
 		lista.add(todo);
+		return todo;
 	}
 	
-	public void update(TodoEntity todo) {
+	public TodoEntity update(Integer id, TodoEntity todo) throws TodoNotFoundException {
 		for (TodoEntity element : lista) {
-			if(element.getId() == todo.getId()) {
-				element.setNome(todo.getNome());
-				element.setDescricao(todo.getDescricao());
-				break;
+			if (element.getId() == id) {
+				if(todo.getNome() != null) {
+					element.setNome(todo.getNome()); //Passando o que o usuario mandou no Objeto Todo para o meu Objeto da lista, todoEntity.
+				}
+				if(todo.getDescricao() != null) {
+					element.setDescricao(todo.getDescricao());
+				}
+				return element;
 			}
 		}
-		System.out.println("ID nao encontrado");
+		throw new TodoNotFoundException("Não foi possivel encontrar esse id: " + id);
 	}
 	
-	public void delete(Integer id) {
+	public String delete(Integer id) throws Exception {
 		for (TodoEntity element : lista) {
 			if(element.getId() == id) {
 				lista.remove(element);
-				break;
+				return "Deletado com sucesso";
 			}
 		}
-		System.out.println("ID nao encontrado");
+		throw new Exception(" Não foi possivel deletar");
 	}
 }

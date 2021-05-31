@@ -1,6 +1,7 @@
 package org.serratec.backend.crud.entity;
 
 public class TodoEntity {
+	
 	private Integer id;
 	private String nome;
 	private String descricao;

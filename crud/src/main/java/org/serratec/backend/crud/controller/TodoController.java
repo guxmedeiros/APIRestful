@@ -1,11 +1,15 @@
 package org.serratec.backend.crud.controller;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.serratec.backend.crud.entity.TodoEntity;
+import org.serratec.backend.crud.exception.TodoNotFoundException;
 import org.serratec.backend.crud.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,31 +23,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/todo")
 public class TodoController {
 	
+	List<TodoEntity> lista = new ArrayList<TodoEntity>();
+
 	@Autowired
-	TodoService service;
-	
+	private TodoService service;
+
 	@GetMapping
-	public List<TodoEntity> getAll() {
-		return service.getAll();
+	public ResponseEntity<List<TodoEntity>> listAll() {
+		return ResponseEntity.ok().header("Custom-Header", "Testando").header("Teste 2", "Teste 3")
+				.body(service.getAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public TodoEntity getId(@PathVariable Integer id) {
-		return service.getId(id);
+	public ResponseEntity<TodoEntity> listById(@PathVariable Integer id) throws TodoNotFoundException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Custom header", "Testando");
+		TodoEntity body = service.getId(id);
+		return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
 	}
-	
+
 	@PostMapping
-	public void create(@RequestBody TodoEntity todo) {
-		service.create(todo);
+	public ResponseEntity<TodoEntity> create(@RequestBody TodoEntity todo) {
+		return new ResponseEntity<TodoEntity>(service.create(todo), HttpStatus.CREATED);
 	}
-	
-	@PutMapping
-	public void update(@RequestBody TodoEntity todo) {
-		service.update(todo);
+
+	@PutMapping("/{id}")
+	public TodoEntity update(@PathVariable Integer id, @RequestBody TodoEntity todo) throws TodoNotFoundException {
+		return service.update(id, todo);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Integer id) {
-		service.delete(id);
+	public String delete(@PathVariable Integer id) throws Exception {
+		return service.delete(id);
 	}
 }

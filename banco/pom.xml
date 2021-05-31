@@ -8,11 +8,11 @@
 		<version>2.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.serratec.backend.crud</groupId>
-	<artifactId>crud</artifactId>
+	<groupId>org.serratec.backend.banco</groupId>
+	<artifactId>banco</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>crud</name>
-	<description>crud</description>
+	<name>banco</name>
+	<description>aplicação para gerenciar contas bancárias</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -24,14 +24,15 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-devtools</artifactId>
-		</dependency>	
 	</dependencies>
 
 	<build>
