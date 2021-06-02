@@ -7,17 +7,22 @@ import org.serratec.backend.banco.entity.ContaEntity;
 import org.serratec.backend.banco.entity.OperacaoEntity;
 import org.serratec.backend.banco.exceptions.ContaNotFoundException;
 import org.serratec.backend.banco.exceptions.SaldoInsuficienteException;
+import org.serratec.backend.banco.repository.ContaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContaService {
+	
+	@Autowired
+	ContaRepository repository;
 	
 	List<ContaEntity> list = new ArrayList<ContaEntity>();
 	
 	Integer numero = 1;
 	
 	public List<ContaEntity> getAll() {
-		return list;
+		return repository.findAll();
 	}
 	
 	public ContaEntity getByNumber(Integer numero) throws ContaNotFoundException {
